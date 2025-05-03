@@ -22,7 +22,7 @@
         }
     ],
     "require": {
-        "php": "^7.4 || ^8.0",
+        "php": "^7.4 || ^8.1",
         "ext-json": "*",
         "doctrine/dbal": "^4.0",
         "doctrine/orm": "^3.0",
