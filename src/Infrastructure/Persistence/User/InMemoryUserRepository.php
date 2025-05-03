@@ -21,11 +21,8 @@ class InMemoryUserRepository implements UserRepository
     public function __construct(array $users = null)
     {
         $this->users = $users ?? [
-            1 => new User(1, 'bill.gates', 'Bill', 'Gates'),
-            2 => new User(2, 'steve.jobs', 'Steve', 'Jobs'),
-            3 => new User(3, 'mark.zuckerberg', 'Mark', 'Zuckerberg'),
-            4 => new User(4, 'evan.spiegel', 'Evan', 'Spiegel'),
-            5 => new User(5, 'jack.dorsey', 'Jack', 'Dorsey'),
+            1 => new User(1, 'admin', 'Admin', 'User', password_hash('secret123', PASSWORD_DEFAULT)),
+            2 => new User(2, 'bill.gates', 'Bill', 'Gates', 'pass'),
         ];
     }
 
@@ -47,5 +44,15 @@ class InMemoryUserRepository implements UserRepository
         }
 
         return $this->users[$id];
+    }
+
+    public function findByUsername(string $username): ?User
+    {
+        foreach ($this->users as $user) {
+            if ($user->getUsername() === $username) {
+                return $user;
+            }
+        }
+        return null;
     }
 }
