@@ -1,5 +1,7 @@
 <?php
 
+    namespace App\Domain\Entity;
+
     use DateTimeImmutable;
     use Doctrine\ORM\Mapping\Column;
     use Doctrine\ORM\Mapping\Entity;
@@ -13,7 +15,7 @@
         #[Id, Column(type: 'integer'), GeneratedValue(strategy: 'AUTO')]
         private int $id;
 
-        #[Column(type: 'string', unique: true, nullable: false, options: ['collation' => 'NOCASE'])]
+        #[Column(type: 'string', unique: true, nullable: false)]
         private string $email;
 
         #[Column(name: 'registered_at', type: 'datetimetz_immutable', nullable: false)]

@@ -46,6 +46,11 @@ class User implements JsonSerializable
         return $this->lastName;
     }
 
+    public function getPassword(): string
+    {
+        return $this->password;
+    }
+
     #[\ReturnTypeWillChange]
     public function jsonSerialize(): array
     {

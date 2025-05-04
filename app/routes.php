@@ -46,9 +46,9 @@ return function (App $app) {
         ]);
     });
     
-    $app->get('/login', [LoginAction::class, 'show']);
-    $app->post('/login', [LoginAction::class, 'login']);
-    $app->get('/logout', [LoginAction::class, 'logout']);
+    $app->get('/login', [LoginAction::class, 'show'])->setName('login');
+    $app->post('/login', [LoginAction::class, 'login'])->setName('login');
+    $app->get('/logout', [LoginAction::class, 'logout'])->setName('logout');
     // Run app
 
     $app->group('/admin', function (Group $group) {
@@ -58,7 +58,7 @@ return function (App $app) {
             $session = $this->get(SessionInterface::class); 
             
             $user = $session->get('user'); 
-    
+            
             if (!$user) {
                 
                 $routeParser = \Slim\Routing\RouteContext::fromRequest($request)->getRouteParser();
