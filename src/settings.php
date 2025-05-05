@@ -5,7 +5,7 @@ return [
         'doctrine' => [
             'dev_mode' => true,
             'cache_dir' => __DIR__ . '/../var/cache/doctrine',
-            'metadata_dirs' => [__DIR__ . '/Domain/Entity'],
+            'metadata_dirs' => [__DIR__ . '/Domain'],
             'connection' => [
                 'driver' => 'pdo_mysql',
                 'host' => $_ENV['DB_HOST'],

@@ -46,10 +46,11 @@ return function (App $app) {
         ]);
     });
     
-    $app->get('/login', [LoginAction::class, 'show'])->setName('login');
-    $app->post('/login', [LoginAction::class, 'login'])->setName('login');
-    $app->get('/logout', [LoginAction::class, 'logout'])->setName('logout');
-    // Run app
+    $app->group('', function (Group $group) {
+        $group->get('/login', [LoginAction::class, 'show'])->setName('login');
+        $group->post('/login', [LoginAction::class, 'login']);
+        $group->get('/logout', [LoginAction::class, 'logout'])->setName('logout');
+    });
 
     $app->group('/admin', function (Group $group) {
         // Protected route - accessible only if authenticated

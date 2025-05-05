@@ -4,28 +4,28 @@ declare(strict_types=1);
 
 namespace App\Application\Actions\Auth;
 
-use App\Domain\User\UserRepository;
+use App\Domain\Auth\SessionInterface;
+use App\Domain\Auth\LoginService;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Routing\RouteContext;
 use Slim\Views\Twig;
-use App\Domain\Auth\SessionInterface;
 
 class LoginAction
 {
     public function __construct(
-        private UserRepository $userRepository,
+        private LoginService $loginService,
         private Twig $twig,
         private SessionInterface $session
     ) {}
 
     public function show(Request $request, Response $response): Response
     {
-        if($this->session->has('user')){
+        if ($this->session->has('user')) {
             return $this->twig->render($response, 'admin/dashboard.twig');
-        } else {
-            return $this->twig->render($response, 'login.twig');
         }
+
+        return $this->twig->render($response, 'login.twig');
     }
 
     public function login(Request $request, Response $response): Response
@@ -41,13 +41,11 @@ class LoginAction
             ]);
         }
 
-        $user = $this->userRepository->findByUsername($username);
+        $userData = $this->loginService->authenticate($username, $password);
 
-        if ($user && password_verify($password, $user->password)) {
-            $this->session->set('user', [
-                'username' => $user->getUsername()
-            ]);
-        
+        if ($userData !== null) {
+            $this->session->set('user', $userData);
+
             $routeParser = RouteContext::fromRequest($request)->getRouteParser();
             return $response
                 ->withHeader('Location', $routeParser->urlFor('dashboard'))

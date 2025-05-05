@@ -18,7 +18,7 @@ require __DIR__ . '/../vendor/autoload.php';
 // Instantiate PHP-DI ContainerBuilder
 $containerBuilder = new ContainerBuilder();
 
-if (false) { // Should be set to true in production
+if (false) {
 	$containerBuilder->enableCompilation(__DIR__ . '/../var/cache');
 }
 
