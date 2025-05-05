@@ -17,10 +17,17 @@ use Slim\Views\Twig;
 use App\Domain\Auth\SessionInterface;
 use App\Infrastructure\Auth\NativeSession;
 use App\Domain\Auth\LoginService;
-use Doctrine\ORM\Tools\Setup;
-use Doctrine\ORM\Configuration;
+use Doctrine\ORM\ORMSetup;
 use Doctrine\DBAL\DriverManager;
-use Doctrine\ORM\EntityManagerFactory;
+use Dotenv\Dotenv;
+use App\Domain\Lead\LeadRepository;
+use App\Application\Service\LeadService;
+use App\Application\Actions\Lead\ViewLeadsAction;
+use App\Application\Actions\Lead\CreateLeadAction;
+use App\Infrastructure\Persistence\Lead\DoctrineLeadRepository;
+
+$dotenv = Dotenv::createImmutable(__DIR__ . '/../');
+$dotenv->safeLoad();
 
 return function (ContainerBuilder $containerBuilder) {
     $containerBuilder->addDefinitions([
@@ -42,6 +49,28 @@ return function (ContainerBuilder $containerBuilder) {
 
         SessionInterface::class => DI\autowire(NativeSession::class),
 
+        EntityManagerInterface::class => function () {
+            // Doctrine ORM 3.3 setup
+            $config = ORMSetup::createAttributeMetadataConfiguration(
+                paths: [__DIR__ . '/../src/Domain'], // path to your entities
+                isDevMode: true
+            );
+
+            $connection = DriverManager::getConnection([
+                'driver' => 'pdo_mysql',            // MySQL driver
+                'host' => $_ENV['DB_HOST'],         // MySQL host
+                'port' => $_ENV['DB_PORT'],         // MySQL port
+                'dbname' => $_ENV['DB_DATABASE'],   // Database name
+                'user' => $_ENV['DB_USERNAME'],     // Database username
+                'password' => $_ENV['DB_PASSWORD'], // Database password
+                'charset' => 'utf8mb4',             // MySQL character set
+            ], $config);
+
+            return new EntityManager($connection, $config);
+        },
+
+        LeadRepository::class => \DI\autowire(DoctrineLeadRepository::class),
+
         UserRepository::class => function (ContainerInterface $c) {
             return new DoctrineUserRepository($c->get(EntityManagerInterface::class));
         },
@@ -50,5 +79,18 @@ return function (ContainerBuilder $containerBuilder) {
             return new LoginService($c->get(UserRepository::class));
         },
 
+        LeadService::class => function (ContainerInterface $container) {
+            return new LeadService($container->get(App\Domain\Lead\LeadRepository::class));
+        },
+        ViewLeadsAction::class => function (ContainerInterface $container) {
+            return new ViewLeadsAction(
+                $container->get(LeadService::class),
+                $container->get(Twig::class)
+            );
+        },
+
+        CreateLeadAction::class => function (ContainerInterface $container) {
+            return new CreateLeadAction($container->get(LeadService::class));
+        },
     ]);
 };

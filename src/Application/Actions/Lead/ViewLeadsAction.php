@@ -19,7 +19,6 @@ class ViewLeadsAction
     public function __invoke(Request $request, Response $response): Response
     {
         $leads = $this->leadService->getAllLeads();
-
         return $this->twig->render($response, 'admin/dashboard.twig', [
             'leads' => $leads,
         ]);

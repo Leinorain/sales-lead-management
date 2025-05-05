@@ -9,7 +9,7 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Routing\RouteContext;
 
-class CreateLeadAction
+class EditLeadAction
 {
     public function __construct(private LeadService $leadService) {}
 

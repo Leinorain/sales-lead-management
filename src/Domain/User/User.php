@@ -1,64 +1,52 @@
 <?php
 
-declare(strict_types=1);
+    namespace App\Domain\User;
 
-namespace App\Domain\User;
+    use DateTimeImmutable;
+    use Doctrine\ORM\Mapping\Column;
+    use Doctrine\ORM\Mapping\Entity;
+    use Doctrine\ORM\Mapping\GeneratedValue;
+    use Doctrine\ORM\Mapping\Id;
+    use Doctrine\ORM\Mapping\Table;
 
-use JsonSerializable;
-
-class User implements JsonSerializable
-{
-    private ?int $id;
-
-    private string $username;
-
-    private string $firstName;
-
-    private string $lastName;
-    public string $password;
-
-    public function __construct(?int $id, string $username, string $firstName, string $lastName, string $password)
+    #[Entity, Table(name: 'users')]
+    class User
     {
-        $this->id = $id;
-        $this->username = strtolower($username);
-        $this->firstName = ucfirst($firstName);
-        $this->lastName = ucfirst($lastName);
-        $this->password = $password;
-    }
+        #[Id, Column(type: 'integer'), GeneratedValue(strategy: 'AUTO')]
+        private int $id;
 
-    public function getUsername(): string
-    {
-        return $this->username;
-    }
+        #[Column(type: 'string', unique: true, nullable: false)]
+        private string $username;
 
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
+        #[Column(type: 'string', unique: true, nullable: false)]
+        private string $password;
 
-    public function getFirstName(): string
-    {
-        return $this->firstName;
-    }
+        #[Column(name: 'registered_at', type: 'datetimetz_immutable', nullable: false)]
+        private DateTimeImmutable $registeredAt;
 
-    public function getLastName(): string
-    {
-        return $this->lastName;
-    }
+        public function __construct(string $username)
+        {
+            $this->username = $username;
+            $this->registeredAt = new DateTimeImmutable('now');
+        }
 
-    public function getPassword(): string
-    {
-        return $this->password;
-    }
+        public function getId(): int
+        {
+            return $this->id;
+        }
 
-    #[\ReturnTypeWillChange]
-    public function jsonSerialize(): array
-    {
-        return [
-            'id' => $this->id,
-            'username' => $this->username,
-            'firstName' => $this->firstName,
-            'lastName' => $this->lastName,
-        ];
+        public function findByUsername(): string
+        {
+            return $this->username;
+        }
+
+        public function password(): string
+        {
+            return $this->password;
+        }
+
+        public function getRegisteredAt(): DateTimeImmutable
+        {
+            return $this->registeredAt;
+        }
     }
-}

@@ -13,6 +13,9 @@ use App\Domain\User\UserRepository;
 use App\Application\Actions\Auth\LoginAction;
 use App\Application\Middleware\AuthMiddleware;
 use App\Domain\Auth\SessionInterface;
+use App\Application\Actions\Lead\ViewLeadsAction;
+use App\Application\Actions\Lead\CreateLeadAction;
+use App\Application\Actions\Lead\UpdateLeadAction;
 
 return function (App $app) {
     $app->options('/{routes:.*}', function (Request $request, Response $response) {
@@ -20,10 +23,6 @@ return function (App $app) {
         return $response;
     });
 
-    // $app->group('/users', function (Group $group) {
-    //     $group->get('', ListUsersAction::class);
-    //     $group->get('/{id}', ViewUserAction::class);
-    // });
 
     $app->get('/users', function (Request $request, Response $response) use ($app) {
         $container = $app->getContainer();
@@ -53,25 +52,7 @@ return function (App $app) {
     });
 
     $app->group('/admin', function (Group $group) {
-        // Protected route - accessible only if authenticated
-        $group->get('/dashboard', function (Request $request, Response $response, $args) {
-            /** @var SessionInterface $session */
-            $session = $this->get(SessionInterface::class); 
-            
-            $user = $session->get('user'); 
-            
-            if (!$user) {
-                
-                $routeParser = \Slim\Routing\RouteContext::fromRequest($request)->getRouteParser();
-                return $response
-                    ->withHeader('Location', $routeParser->urlFor('login')) 
-                    ->withStatus(302);
-            }
-    
-            $view = Twig::fromRequest($request);
-            return $view->render($response, 'admin/dashboard.twig', [
-                'user' => $user
-            ]);
-        })->setName('dashboard');
+        $group->get('/dashboard', ViewLeadsAction::class)->setName('dashboard');
+        $group->post('/leads', CreateLeadAction::class)->setName('create_lead');
     })->add(AuthMiddleware::class);
 };

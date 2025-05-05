@@ -14,13 +14,13 @@ class LoginService
     {
         $user = $this->userRepository->findByUsername($username);
 
-        if (!$user || !password_verify($password, $user->password)) {
+        if (!$user || !password_verify($password, $user->password())) {
             return null;
         }
 
         return [
             'id' => $user->getId(),
-            'username' => $user->getUsername(),
+            'username' => $user->findByUsername(),
         ];
     }
 }

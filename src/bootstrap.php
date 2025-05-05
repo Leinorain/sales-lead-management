@@ -2,6 +2,7 @@
 
 use Doctrine\DBAL\DriverManager;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\ORMSetup;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
@@ -49,6 +50,10 @@ $container->set(EntityManager::class, static function (Container $c): EntityMana
     $connection = DriverManager::getConnection($settings['doctrine']['connection']);
 
     return new EntityManager($connection, $config);
+});
+
+$container->set(EntityManagerInterface::class, static function (ContainerInterface $c): EntityManagerInterface {
+    return $c->get(EntityManager::class);
 });
 
 return $container;
