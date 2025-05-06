@@ -21,4 +21,14 @@ class LeadService
     {
         return $this->leadRepository->findAll();
     }
+
+    public function getLeadById(int $id): ?Lead
+    {
+        return $this->leadRepository->findById($id);
+    }
+
+    public function updateLead(int $id, string $name, string $contact, string $email, string $interest): void
+    {
+        $this->leadRepository->updateLead($id, $name, $contact, $email, $interest);
+    }
 }

@@ -16,6 +16,7 @@ use App\Domain\Auth\SessionInterface;
 use App\Application\Actions\Lead\ViewLeadsAction;
 use App\Application\Actions\Lead\CreateLeadAction;
 use App\Application\Actions\Lead\UpdateLeadAction;
+use App\Application\Actions\Lead\EditLeadAction;
 
 return function (App $app) {
     $app->options('/{routes:.*}', function (Request $request, Response $response) {
@@ -53,6 +54,8 @@ return function (App $app) {
 
     $app->group('/admin', function (Group $group) {
         $group->get('/dashboard', ViewLeadsAction::class)->setName('dashboard');
-        $group->post('/leads', CreateLeadAction::class)->setName('create_lead');
+        $group->post('/leads', CreateLeadAction::class)->setName('lead.create');
+        $group->get('/leads/{id}/edit', EditLeadAction::class)->setName('lead.edit');
+        $group->post('/leads/{id}/update', UpdateLeadAction::class)->setName('lead.update');
     })->add(AuthMiddleware::class);
 };

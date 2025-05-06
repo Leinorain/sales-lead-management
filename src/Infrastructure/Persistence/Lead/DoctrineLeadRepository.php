@@ -28,4 +28,21 @@ class DoctrineLeadRepository implements LeadRepository
     {
         return $this->repository->findAll();
     }
+    
+    public function findById(int $id): ?Lead
+    {
+        return $this->entityManager->find(Lead::class, $id);
+    }
+
+    public function updateLead(int $id, string $name, string $contact, string $email, string $interest): void
+    {
+        $lead = $this->findById($id);
+        if ($lead) {
+            $lead->setName($name);
+            $lead->setContactNumber($contact);
+            $lead->setEmail($email);
+            $lead->setProductInterest($interest);
+            $this->entityManager->flush();
+        }
+    }
 }

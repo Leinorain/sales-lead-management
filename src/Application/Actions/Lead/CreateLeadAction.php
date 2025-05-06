@@ -26,8 +26,6 @@ class CreateLeadAction
             $this->leadService->createLead($name, $contactNumber, $email, $productInterest);
         }
 
-        $this->leadService->createLead($name, $contactNumber, $email, $productInterest);
-
         $routeParser = RouteContext::fromRequest($request)->getRouteParser();
         return $response
             ->withHeader('Location', $routeParser->urlFor('dashboard'))

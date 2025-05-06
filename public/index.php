@@ -11,6 +11,8 @@ use Slim\Factory\AppFactory;
 use Slim\Factory\ServerRequestCreatorFactory;
 use Slim\Views\Twig;
 use Slim\Views\TwigMiddleware;
+use Slim\Routing\RouteContext;
+use Slim\Views\TwigExtension;
 
 
 require __DIR__ . '/../vendor/autoload.php';
@@ -41,7 +43,9 @@ $container = $containerBuilder->build();
 AppFactory::setContainer($container);
 $app = AppFactory::create();
 
+// $twig = $container->get(Twig::class);
 $twig = $container->get(Twig::class);
+
 $app->add(TwigMiddleware::create($app, $twig));
 
 $callableResolver = $app->getCallableResolver();
@@ -87,3 +91,4 @@ $errorMiddleware->setDefaultErrorHandler($errorHandler);
 $response = $app->handle($request);
 $responseEmitter = new ResponseEmitter();
 $responseEmitter->emit($response);
+

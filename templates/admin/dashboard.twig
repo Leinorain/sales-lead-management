@@ -14,7 +14,7 @@
     </ul>
 
     <h2>Create Lead</h2>
-    <form method="put" action="/admin/leads">
+    <form method="post" action="{{ url_for('lead.create') }}">
         <input type="text" name="name" placeholder="Name" required>
         <input type="text" name="contactNumber" placeholder="Contact Number" required>
         <input type="email" name="email" placeholder="Email" required>

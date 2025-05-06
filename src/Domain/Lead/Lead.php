@@ -48,6 +48,7 @@ class Lead
         $this->createdAt = new \DateTime();
     }
 
+    // getters
     public function getId(): int
     {
         return $this->id;
@@ -58,12 +59,6 @@ class Lead
         return $this->name;
     }
 
-    public function setName(string $name): void
-    {
-        $this->name = $name;
-    }
-
-
     public function getContactNumber(): string
     {
         return $this->contactNumber;
@@ -72,11 +67,6 @@ class Lead
     public function getEmail(): string
     {
         return $this->email;
-    }
-
-    public function setEmail(string $email): void
-    {
-        $this->email = $email;
     }
 
     public function getProductInterest(): string
@@ -92,6 +82,27 @@ class Lead
     public function getCreatedAt(): \DateTime
     {
         return $this->createdAt;
+    }
+
+    // setters
+    public function setName(string $name): void
+    {
+        $this->name = $name;
+    }
+
+    public function setContactNumber(string $contact): void
+    {
+        $this->contactNumber = $contact;
+    }
+
+    public function setEmail(string $email): void
+    {
+        $this->email = $email;
+    }
+
+    public function setProductInterest(string $productInterest): void
+    {
+        $this->productInterest = $productInterest;
     }
 
     public function setStatus(string $status): void
