@@ -25,6 +25,7 @@ use App\Application\Service\LeadService;
 use App\Application\Actions\Lead\ViewLeadsAction;
 use App\Application\Actions\Lead\CreateLeadAction;
 use App\Infrastructure\Persistence\Lead\DoctrineLeadRepository;
+use Slim\Handlers\ErrorHandler;
 
 $dotenv = Dotenv::createImmutable(__DIR__ . '/../');
 $dotenv->safeLoad();
@@ -50,20 +51,19 @@ return function (ContainerBuilder $containerBuilder) {
         SessionInterface::class => DI\autowire(NativeSession::class),
 
         EntityManagerInterface::class => function () {
-            // Doctrine ORM 3.3 setup
             $config = ORMSetup::createAttributeMetadataConfiguration(
-                paths: [__DIR__ . '/../src/Domain'], // path to your entities
+                paths: [__DIR__ . '/../src/Domain'], 
                 isDevMode: true
             );
 
             $connection = DriverManager::getConnection([
-                'driver' => 'pdo_mysql',            // MySQL driver
-                'host' => $_ENV['DB_HOST'],         // MySQL host
-                'port' => $_ENV['DB_PORT'],         // MySQL port
-                'dbname' => $_ENV['DB_DATABASE'],   // Database name
-                'user' => $_ENV['DB_USERNAME'],     // Database username
-                'password' => $_ENV['DB_PASSWORD'], // Database password
-                'charset' => 'utf8mb4',             // MySQL character set
+                'driver' => 'pdo_mysql',            
+                'host' => $_ENV['DB_HOST'],         
+                'port' => $_ENV['DB_PORT'],         
+                'dbname' => $_ENV['DB_DATABASE'],   
+                'user' => $_ENV['DB_USERNAME'],     
+                'password' => $_ENV['DB_PASSWORD'], 
+                'charset' => 'utf8mb4',             
             ], $config);
 
             return new EntityManager($connection, $config);

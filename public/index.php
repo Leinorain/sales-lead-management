@@ -92,3 +92,8 @@ $response = $app->handle($request);
 $responseEmitter = new ResponseEmitter();
 $responseEmitter->emit($response);
 
+$errorMiddleware = $app->addErrorMiddleware(
+    $displayErrorDetails,
+    $logError,
+    $logErrorDetails
+);

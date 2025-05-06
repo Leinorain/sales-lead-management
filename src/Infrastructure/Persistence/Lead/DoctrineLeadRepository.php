@@ -28,13 +28,13 @@ class DoctrineLeadRepository implements LeadRepository
     {
         return $this->repository->findAll();
     }
-    
+
     public function findById(int $id): ?Lead
     {
         return $this->entityManager->find(Lead::class, $id);
     }
 
-    public function updateLead(int $id, string $name, string $contact, string $email, string $interest): void
+    public function updateLead(int $id, string $name, string $contact, string $email, string $interest, string $status): void
     {
         $lead = $this->findById($id);
         if ($lead) {
@@ -42,7 +42,25 @@ class DoctrineLeadRepository implements LeadRepository
             $lead->setContactNumber($contact);
             $lead->setEmail($email);
             $lead->setProductInterest($interest);
+            $lead->setStatus($status);
             $this->entityManager->flush();
         }
+    }
+
+    public function delete(int $id): void
+    {
+        $lead = $this->entityManager->find(Lead::class, $id);
+        if ($lead !== null) {
+            $this->entityManager->remove($lead);
+            $this->entityManager->flush();
+        }
+    }
+
+    public function countByStatus(string $status): int
+    {
+        return (int) $this->entityManager
+            ->createQuery('SELECT COUNT(l.id) FROM App\Domain\Lead\Lead l WHERE l.status = :status')
+            ->setParameter('status', $status)
+            ->getSingleScalarResult();
     }
 }

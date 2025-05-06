@@ -15,15 +15,14 @@ $isDevMode = true;
 
 $config = ORMSetup::createAttributeMetadataConfiguration($paths, $isDevMode);
 
-// Use the same connection you've already used for schema commands
 $connectionParams = [
-    'driver' => 'pdo_mysql',               // Use MySQL
-    'host' => $_ENV['DB_HOST'],            // MySQL host (e.g., localhost)
-    'port' => $_ENV['DB_PORT'],            // MySQL port (usually 3306)
-    'dbname' => $_ENV['DB_DATABASE'],      // Database name
-    'user' => $_ENV['DB_USERNAME'],        // Username for the database
-    'password' => $_ENV['DB_PASSWORD'],    // Password for the database
-    'charset' => 'utf8mb4',                // Character set
+    'driver' => 'pdo_mysql',               
+    'host' => $_ENV['DB_HOST'],            
+    'port' => $_ENV['DB_PORT'],            
+    'dbname' => $_ENV['DB_DATABASE'],     
+    'user' => $_ENV['DB_USERNAME'],       
+    'password' => $_ENV['DB_PASSWORD'],   
+    'charset' => 'utf8mb4',               
 ];
 
 $connection = DriverManager::getConnection($connectionParams, $config);

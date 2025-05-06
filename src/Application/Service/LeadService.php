@@ -27,8 +27,18 @@ class LeadService
         return $this->leadRepository->findById($id);
     }
 
-    public function updateLead(int $id, string $name, string $contact, string $email, string $interest): void
+    public function updateLead(int $id, string $name, string $contact, string $email, string $interest, string $status): void
     {
-        $this->leadRepository->updateLead($id, $name, $contact, $email, $interest);
+        $this->leadRepository->updateLead($id, $name, $contact, $email, $interest, $status);
+    }
+
+    public function deleteLead(int $id): void
+    {
+        $this->leadRepository->delete($id);
+    }
+
+    public function countLeadsByStatus(string $status): int
+    {
+        return $this->leadRepository->countByStatus($status);
     }
 }

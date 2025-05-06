@@ -28,7 +28,7 @@ class CreateLeadAction
 
         $routeParser = RouteContext::fromRequest($request)->getRouteParser();
         return $response
-            ->withHeader('Location', $routeParser->urlFor('dashboard'))
+            ->withHeader('Location', $routeParser->urlFor('leads'))
             ->withStatus(302);
     }
 }

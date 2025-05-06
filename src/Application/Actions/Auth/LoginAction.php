@@ -22,7 +22,7 @@ class LoginAction
     public function show(Request $request, Response $response): Response
     {
         if ($this->session->has('user')) {
-            return $this->twig->render($response, 'admin/dashboard.twig');
+            return $this->twig->render($response, 'admin/leads.twig');
         }
 
         return $this->twig->render($response, 'login.twig');
@@ -48,7 +48,7 @@ class LoginAction
 
             $routeParser = RouteContext::fromRequest($request)->getRouteParser();
             return $response
-                ->withHeader('Location', $routeParser->urlFor('dashboard'))
+                ->withHeader('Location', $routeParser->urlFor('leads'))
                 ->withStatus(302);
         }
 
