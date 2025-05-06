@@ -41,4 +41,24 @@ class LeadService
     {
         return $this->leadRepository->countByStatus($status);
     }
+
+    public function getPipelineLeads(): array
+    {
+        $grouped = ['New' => [], 'Contacted' => [], 'Closed' => []];
+        foreach ($this->leadRepository->findAll() as $lead) {
+            $grouped[$lead->getStatus()][] = $lead;
+        }
+        return $grouped;
+    }
+
+    public function updateLeadStatus(int $id, string $status): void
+    {
+        $lead = $this->leadRepository->findById($id);
+        if (!$lead) {
+            throw new \RuntimeException("Lead not found");
+        }
+
+        $lead->setStatus($status);
+        $this->leadRepository->save($lead);
+        }
 }

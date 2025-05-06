@@ -1,0 +1,133 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Index{% endblock %}
+
+{% block head %}
+    {{ parent() }}
+    <style>
+        .pipeline-column {
+            min-height: 300px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 10px;
+        }
+
+        .pipeline-column[data-status="New"] {
+            background-color: #e3f2fd; /* Light Blue */
+        }
+
+        .pipeline-column[data-status="Contacted"] {
+            background-color: #fff9c4; /* Light Yellow */
+        }
+
+        .pipeline-column[data-status="Closed"] {
+            background-color: #c8e6c9; /* Light Green */
+        }
+
+        .lead-card {
+            background-color: white;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            cursor: grab;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .lead-card.dragging {
+            opacity: 0.5;
+        }
+
+        .column-title {
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        /* for bg */
+
+        
+    </style>
+{% endblock %}
+
+    {% block content %}
+    <div class="container mt-4 ">
+        <h1 class="text-center mb-4">Sales Pipeline</h1>
+        <div class="row text-center">
+            <div class="col-md-4">
+                <div class="pipeline-column" data-status="New" ondrop="onDrop(event)" ondragover="onDragOver(event)">
+                    <div class="column-title">New</div>
+                    {% for lead in leads['New'] ?? [] %}
+                        <div class="lead-card" 
+                            draggable="true" 
+                            ondragstart="onDragStart(event)" 
+                            data-id="{{ lead.id }}">
+                            <strong>{{ lead.name }}</strong><br>
+                            {{ lead.email }}<br>
+                            {{ lead.productInterest }}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="pipeline-column" data-status="Contacted" ondrop="onDrop(event)" ondragover="onDragOver(event)">
+                    <div class="column-title">Contacted</div>
+                    {% for lead in leads['Contacted'] ?? [] %}
+                        <div class="lead-card" 
+                            draggable="true" 
+                            ondragstart="onDragStart(event)" 
+                            data-id="{{ lead.id }}">
+                            <strong>{{ lead.name }}</strong><br>
+                            {{ lead.email }}<br>
+                            {{ lead.productInterest }}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="pipeline-column" data-status="Closed" ondrop="onDrop(event)" ondragover="onDragOver(event)">
+                    <div class="column-title">Closed</div>
+                    {% for lead in leads['Closed'] ?? [] %}
+                        <div class="lead-card" 
+                            draggable="true" 
+                            ondragstart="onDragStart(event)" 
+                            data-id="{{ lead.id }}">
+                            <strong>{{ lead.name }}</strong><br>
+                            {{ lead.email }}<br>
+                            {{ lead.productInterest }}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function onDragStart(event) {
+            event.dataTransfer.setData("text/plain", event.target.dataset.id);
+            event.target.classList.add('dragging');
+        }
+
+        function onDragOver(event) {
+            event.preventDefault();
+        }
+
+        function onDrop(event) {
+            event.preventDefault();
+            const leadId = event.dataTransfer.getData("text/plain");
+            const newStatus = event.currentTarget.dataset.status;
+
+            fetch(`/leads/${leadId}/status`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ status: newStatus })
+            }).then(response => {
+                if (response.ok) {
+                    location.reload();
+                } else {
+                    alert("Failed to update lead status");
+                }
+            });
+        }
+    </script>
+
+{% endblock %}

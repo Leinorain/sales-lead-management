@@ -19,6 +19,9 @@ use App\Application\Actions\Lead\UpdateLeadAction;
 use App\Application\Actions\Lead\EditLeadAction;
 use App\Application\Actions\Lead\DeleteLeadAction;
 use App\Application\Actions\Lead\DashboardAction;
+use App\Application\Actions\Lead\NewLeadAction;
+use App\Application\Actions\Lead\ViewPipelineAction;
+use App\Application\Actions\Lead\UpdateLeadStatusAction;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 return function (App $app) {
@@ -56,12 +59,17 @@ return function (App $app) {
     });
 
     $app->group('/admin', function (Group $group) {
-        // $group->get('/leads?page={page}&sort_field={sort_field}&sort_order={sort_order}', ViewLeadsAction::class)->setName('leads');
         $group->get('/leads', ViewLeadsAction::class)->setName('leads');
         $group->get('/dashboard', DashboardAction::class)->setName('dashboard');
-        $group->post('/leads', CreateLeadAction::class)->setName('lead.create');
+        $group->get('/leads/create', NewLeadAction::class)->setName('lead.create');
+        $group->post('/leads', CreateLeadAction::class)->setName('lead.post');
         $group->get('/leads/{id}/edit', EditLeadAction::class)->setName('lead.edit');
         $group->post('/leads/{id}/update', UpdateLeadAction::class)->setName('lead.update');
         $group->get('/leads/{id}/delete', DeleteLeadAction::class)->setName('lead.delete');
+        $group->get('/pipeline', ViewPipelineAction::class)->setName('pipeline');
+        // $this->post('/lead/{id}/status', UpdateLeadStatusAction::class)->setName('lead.update_status');
     })->add(AuthMiddleware::class);
+
+    $app->post('/leads/{id}/status', UpdateLeadStatusAction::class)
+    ->setName('lead.update_status');
 };
