@@ -9,14 +9,34 @@
 {% block content %}
         <div class="container px-4 py-3 px-md-5 text-center text-lg-start my-5">
             <h1>Lead List</h1>
-            <a href = "{{ url_for('lead.create') }}">
-                <i class="fa fa-user-plus" aria-hidden="true"></i>
-            </a>
+
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <a href="{{ url_for('lead.create') }}">
+                    <button class="btn btn-primary">
+                        Create New Lead
+                        <i class="fa fa-user-plus" aria-hidden="true"></i>
+                    </button>
+                </a>
+
+                <form method="get" action="{{ url_for('leads') }}" class="mb-4">
+                    <div class="row g-2 align-items-center">
+                        <div class="col-auto">
+                            <input type="text" name="search" value="{{ search|default('') }}" class="form-control" placeholder="Leads name or product">
+                        </div>
+                        <div class="col-auto">
+                            <button type="submit" class="btn btn-outline-secondary">
+                                <i class="fas fa-search"></i> Search
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
             <table class="table table-hover">
                 <thead>
                     <tr>
                         <th>
-                            <a href="{{ url_for('leads') ~ 
+                            <a class="no-style-link" href="{{ url_for('leads') ~ 
                                     '?page=' ~ currentPage ~
                                     '&sort_field=name&sort_order=' ~ (
                                         sort_order == 'asc'
@@ -24,14 +44,16 @@
                                         'desc'
                                         :
                                         'asc'
-                                    )
+                                    ) ~
+                                    (search is defined and search ? '&search=' ~ search : '')
                             }}">
+                                <i class="fas fa-sort"></i>
                                 Name
                             </a>
                         </th>
                         <th scope="col">Contact Number</th>
                         <th>
-                            <a href="{{ url_for('leads') ~ 
+                            <a class="no-style-link" href="{{ url_for('leads') ~ 
                                     '?page=' ~ currentPage ~
                                     '&sort_field=email&sort_order=' ~ (
                                         sort_order == 'asc'
@@ -39,15 +61,17 @@
                                         'desc'
                                         :
                                         'asc'
-                                    )
+                                    ) ~
+                                    (search is defined and search ? '&search=' ~ search : '')
                             }}">
+                                <i class="fas fa-sort"></i>
                                 Email
                             </a>
                         </th>
                         <th scope="col">Product Interest</th>
                         <th>
                             
-                            <a href="{{ url_for('leads') ~ 
+                            <a class="no-style-link" href="{{ url_for('leads') ~ 
                                     '?page=' ~ currentPage ~
                                     '&sort_field=status&sort_order=' ~ (
                                         sort_order == 'asc'
@@ -55,8 +79,10 @@
                                         'desc'
                                         :
                                         'asc'
-                                    )
+                                    ) ~
+                                    (search is defined and search ? '&search=' ~ search : '')
                             }}">
+                                <i class="fas fa-sort"></i>
                                 Status
                             </a>
                         </th>
@@ -74,7 +100,7 @@
                             <td>{{ lead.status }}</td>
                             <td>
                             <form action="{{ url_for('lead.delete', { id: lead.id }) }}" method="delete" style="display:inline">
-                                <button type="submit" class="btn btn-danger"><i class="fa-solid fa-trash"></i> Delete</button>
+                                <button type="submit" class="btn btn-danger"><i class="fa-solid fa-trash"></i> </button>
                             </form>
                             </td>
                         </tr>
@@ -87,7 +113,8 @@
                 <ul class="pagination justify-content-center">
                   {% for i in 1..totalPages %}
                     <li class="page-item {{ i == currentPage ? 'active' : '' }}">
-                      <a class="page-link" href="{{ url_for('leads') ~ '?page=' ~ i ~ '&sort_field=' ~ sort_field ~ '&sort_order=' ~ sort_order }}">
+                      <a class="page-link" href="{{ url_for('leads') ~ '?page=' ~ i ~ '&sort_field=' ~ sort_field ~ '&sort_order=' ~ sort_order ~ 
+    (search is defined and search ? '&search=' ~ search : '')}} ">
                         {{ i }}
                       </a>
                     </li>

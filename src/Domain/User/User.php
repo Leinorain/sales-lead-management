@@ -28,6 +28,7 @@
         {
             $this->username = $username;
             $this->registeredAt = new DateTimeImmutable('now');
+            // $this->registeredAt = new DateTimeImmutable('now');
         }
 
         public function getId(): int

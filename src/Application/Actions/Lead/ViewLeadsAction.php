@@ -42,13 +42,15 @@ class ViewLeadsAction
         $totalLeads = count($allLeads);
         $leads = array_slice($allLeads, $offset, $limit);
 
+        
+
         return $this->twig->render($response, 'admin/leads.twig', [
             'leads' => $leads,
             'currentPage' => $page,
             'totalPages' => ceil($totalLeads / $limit),
             'offset' => $offset,
             'sort_field' => $sortField,
-            'sort_order' => $sortOrder
+            'sort_order' => $sortOrder,
         ]);
     }
 }

@@ -20,53 +20,6 @@
                 crossorigin="anonymous">
             </script>
         {% endblock %}
-        <style>
-            .background-radial-gradient {
-                background-color: hsl(218, 41%, 15%);
-                background-image: radial-gradient(650px circle at 0% 0%,
-                    hsl(218, 41%, 35%) 15%,
-                    hsl(218, 41%, 30%) 35%,
-                    hsl(218, 41%, 20%) 75%,
-                    hsl(218, 41%, 19%) 80%,
-                    transparent 100%),
-                radial-gradient(1250px circle at 100% 100%,
-                    hsl(218, 41%, 45%) 15%,
-                    hsl(218, 41%, 30%) 35%,
-                    hsl(218, 41%, 20%) 75%,
-                    hsl(218, 41%, 19%) 80%,
-                    transparent 100%);
-            }
-        
-            #radius-shape-1 {
-                height: 220px;
-                width: 220px;
-                top: -60px;
-                left: -100px;
-                background: radial-gradient(#44006b, #ad1fff);
-                overflow: hidden;
-            }
-        
-            #radius-shape-2 {
-                border-radius: 38% 62% 63% 37% / 70% 33% 67% 30%;
-                bottom: -60px;
-                right: -110px;
-                width: 300px;
-                height: 300px;
-                background: radial-gradient(#44006b, #ad1fff);
-                overflow: hidden;
-            }
-        
-            .bg-glass {
-                background-color: hsla(0, 0%, 100%, 0.8) !important;
-                backdrop-filter: saturate(200%) blur(25px);
-            }
-    
-            .input-bg-glass, .input-bg-glass:focus {
-                background: transparent;
-                border: 2px solid #73abff;
-                outline: none;
-            }
-        </style>
     </head>
     {# <body class="background-radial-gradient"> #}
     <body>
@@ -77,21 +30,23 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
-                    <a class="navbar-brand" href=" {{url_for('leads')}} ">Sales Lead Management System</a>
+                    <a class="navbar-brand" href=" {{url_for('dashboard')}} ">Sales Lead Management System</a>
                         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                            <li class="nav-item">
+                                <a class="nav-link" href=" {{ url_for('dashboard') }} ">Dashboard</a>
+                            </li>
                             <li class="nav-item">
                                 <a class="nav-link" href=" {{url_for('leads')}} ">Leads</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href=" {{url_for('pipeline')}} ">Pipeline</a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href=" {{ url_for('logout') }} ">Logout</a>
-                            </li>
                         </ul>
-                    <form class="d-flex" role="search">
-                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                        <button class="btn btn-outline-success" type="submit">Search</button>
+                    <form class="d-flex">
+                        {# <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"> #}
+                        <button class="btn btn-outline-success" type="submit">
+                            <a class="nav-link" href=" {{ url_for('logout') }} ">Logout</a>
+                        </button>
                     </form>
                 </div>
             </div>
@@ -101,12 +56,9 @@
 
         <div id="content" class="container px-4 py-3 px-md-5 text-center text-lg-start my-5">{% block content %}{% endblock %}</div>
         
-        {# <div class="col-lg-6 mb-5 mb-lg-0 position-relative">
-        <div id="radius-shape-1" class="position-absolute rounded-circle shadow-5-strong"></div>
-        <div id="radius-shape-2" class="position-absolute shadow-5-strong"></div> #}
-        
         {# {% block footer %}
-            &copy; Copyright 2011 by <a href="https://example.com/">you</a>.
+            &copy; Source Code: by <a href="https://github.com/Leinorain/sales-lead-management">Leinorain Autida</a>.
         {% endblock %} #}
+        
     </body>
 </html>

@@ -1,6 +1,6 @@
 {% extends "base.html.twig" %}
 
-{% block title %}Index{% endblock %}
+{% block title %}Create Lead{% endblock %}
 
 {% block head %}
     {{ parent() }}
@@ -9,10 +9,14 @@
 {% block content %}
     <h2>Create Lead</h2>
     <form method="post" action="{{ url_for('lead.post') }}">
-        <input type="text" name="name" placeholder="Name" required>
-        <input type="text" name="contactNumber" placeholder="Contact Number" required>
-        <input type="email" name="email" placeholder="Email" required>
-        <input type="text" name="productInterest" placeholder="Product Interest" required>
-        <button type="submit">Create Lead</button>
+        <input class="form-control" type="text" name="name" placeholder="Name" required>
+        <input class="form-control" type="number" name="contactNumber" placeholder="Contact Number" required>
+        <input class="form-control" type="email" name="email" placeholder="Email" required>
+        <input class="form-control" type="text" name="productInterest" placeholder="Product Interest" required>
+        
+        <button class="btn btn-primary">
+            Create New Lead
+            <i class="fa fa-user-plus" aria-hidden="true"></i>
+        </button>
     </form>
 {% endblock %}

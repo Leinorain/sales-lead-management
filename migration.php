@@ -11,7 +11,7 @@ $container = require __DIR__ . '/src/bootstrap.php';
 $em = $container->get(EntityManagerInterface::class);
 
 // Create and persist the user
-$user = new User('admin'); // Pass your username
+$user = new User('admin');
 $reflection = new ReflectionClass($user);
 $passwordProperty = $reflection->getProperty('password');
 $passwordProperty->setAccessible(true);

@@ -1,10 +1,9 @@
-{% extends "base.html.twig" %}
+{% extends "login-base.html.twig" %}
 
 {% block title %}Index{% endblock %}
 
 {% block head %}
     {{ parent() }}
-    <style>{{ source('login-background.css') }}</style>
 {% endblock %}
 
 {% block content %}
@@ -32,7 +31,7 @@
                         <div class="card-body px-4 py-5 px-md-5">
                             <h4> Admin Login </h4>
                             <br>
-                            <form method="post" action="/login">
+                            <form method="post" action="{{ url_for('login') }}">
                                 <!-- Email input -->
                                 <div data-mdb-input-init class="form-outline mb-4">
                                 <input type="text" name="username" id="form3Example3" placeholder="Enter your username." class="form-control input-bg-glass"/>

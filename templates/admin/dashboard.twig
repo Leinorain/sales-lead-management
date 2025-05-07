@@ -4,6 +4,7 @@
 
 {% block head %}
     {{ parent() }}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 {% endblock %}
 
 {% block content %}
@@ -22,9 +23,18 @@
                     <div class="card-body">
                         <h6 class="card-title">Leads by Status</h6>
                         <ul class="list-group list-group-flush">
-                            <p><strong>New Leads:</strong> {{ newCount }}</p>
-                            <p><strong>Contacted Leads:</strong> {{ contactedCount }}</p>
-                            <p><strong>Closed Leads:</strong> {{ closedCount }}</p>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <strong>New Leads:</strong> 
+                                <span class="badge bg-primary rounded-pill">{{ newCount }}</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <strong>Contacted Leads:</strong> 
+                                <span class="badge bg-warning rounded-pill">{{ contactedCount }}</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <strong>Closed Leads:</strong> 
+                                <span class="badge bg-success rounded-pill">{{ closedCount }}</span>
+                            </li>
                         </ul>
                     </div>
                 </div>
@@ -35,14 +45,11 @@
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">Leads in Last 3 Months</h5>
-                        <ul class="list-group list-group-flush">
-                            {% for month, count in monthlyLeads %}
-                                <li class="list-group-item d-flex justify-content-between align-items-center">
-                                    {{ month }}
-                                    <span class="badge bg-success rounded-pill">{{ count }}</span>
-                                </li>
-                            {% endfor %}
-                        </ul>
+                        {% if monthlyLeads is empty %}
+                            <p class="text-muted">No leads in the last 3 months.</p>
+                        {% else %}
+                            <canvas id="monthlyLeadsChart" height="200"></canvas>
+                        {% endif %}
                     </div>
                 </div>
             </div>
@@ -51,7 +58,21 @@
         <!-- Latest 3 Leads -->
         <div class="card">
             <div class="card-body">
-                <h5 class="card-title">Latest 3 Leads</h5>
+                <div class="card-title">
+                    <h5>Latest 3 Leads</h5>
+                    <a href="{{ url_for('lead.create') }}">
+                        <button class="btn btn-primary">
+                            Create New Lead
+                            <i class="fa fa-user-plus" aria-hidden="true"></i>
+                        </button>
+                    </a>
+                    <a href="{{ url_for('leads') }}">
+                        <button class="btn btn-success">
+                            View All Leads
+                            <i class="fa fa-user-plus" aria-hidden="true"></i>
+                        </button>
+                    </a>
+                </div>
                 <table class="table table-striped">
                     <thead>
                         <tr>
@@ -77,4 +98,35 @@
             </div>
         </div>
     </div>
+
+    {% if monthlyLeads is not empty %}
+        <script>
+            const labels = {{ monthlyLabels|json_encode|raw }};
+            const data = {{ monthlyValues|json_encode|raw }};
+
+            const ctx = document.getElementById('monthlyLeadsChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Leads by Month',
+                        data: data,
+                        backgroundColor: 'rgba(54, 162, 235, 0.7)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    scales: {
+                        x: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        </script>
+    {% endif %}
 {% endblock %}

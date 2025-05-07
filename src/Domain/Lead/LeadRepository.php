@@ -17,4 +17,5 @@ interface LeadRepository
     public function delete(int $id): void;
 
     public function countByStatus(string $status): int;
+    
 }

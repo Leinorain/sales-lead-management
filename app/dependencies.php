@@ -85,7 +85,7 @@ return function (ContainerBuilder $containerBuilder) {
         ViewLeadsAction::class => function (ContainerInterface $container) {
             return new ViewLeadsAction(
                 $container->get(LeadService::class),
-                $container->get(Twig::class)
+                $container->get(Twig::class),
             );
         },
 

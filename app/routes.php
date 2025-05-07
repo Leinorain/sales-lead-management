@@ -47,9 +47,7 @@ return function (App $app) {
     $app->get('/', function ($request, $response) {
         $view = Twig::fromRequest($request);
         
-        return $view->render($response, 'home.html.twig', [
-            'name' => 'Test',
-        ]);
+        return $view->render($response, 'login.twig');
     });
     
     $app->group('', function (Group $group) {

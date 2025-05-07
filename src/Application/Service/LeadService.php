@@ -60,5 +60,53 @@ class LeadService
 
         $lead->setStatus($status);
         $this->leadRepository->save($lead);
+    }
+
+    public function getLeadsForLastThreeMonths(): array
+    {
+        $allLeads = $this->leadRepository->findAll();
+        $counts = [];
+
+        $now = new \DateTimeImmutable('first day of this month');
+
+        // Prepare the last 3 months (including current)
+        for ($i = 0; $i < 3; $i++) {
+            $month = $now->modify("-{$i} months")->format('F Y');
+            $counts[$month] = 0;
         }
+
+        foreach ($allLeads as $lead) {
+            $createdAt = $lead->getCreatedAt();
+            if (!$createdAt instanceof \DateTimeInterface) continue;
+
+            $leadMonth = \DateTimeImmutable::createFromFormat('Y-m-d', $createdAt->format('Y-m-01'));
+            $monthKey = $leadMonth->format('F Y');
+
+            if (array_key_exists($monthKey, $counts)) {
+                $counts[$monthKey]++;
+            }
+        }
+
+        // Optional: Sort descending by date
+        uksort($counts, function ($a, $b) {
+            return strtotime($b) <=> strtotime($a);
+        });
+
+        return $counts;
+    }
+
+
+
+    public function getLatestLeads(int $limit = 3): array
+    {
+        $allLeads = $this->leadRepository->findAll();
+        usort($allLeads, function ($a, $b) {
+            return $b->getCreatedAt() <=> $a->getCreatedAt();
+        });
+
+        return 
+        
+        array_slice($allLeads, 0, $limit);
+    }
+    
 }
