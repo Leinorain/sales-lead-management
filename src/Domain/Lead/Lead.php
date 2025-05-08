@@ -38,14 +38,15 @@ class Lead
         string $contactNumber,
         string $email,
         string $productInterest,
-        string $status = 'New'
+        string $status = 'New',
+        ?\DateTime $createdAt = null
     ) {
         $this->name = $name;
         $this->contactNumber = $contactNumber;
         $this->email = $email;
         $this->productInterest = $productInterest;
         $this->status = $status;
-        $this->createdAt = new \DateTime();
+        $this->createdAt = $createdAt ?? new \DateTime();
     }
 
     // getters

@@ -69,7 +69,6 @@ class LeadService
 
         $now = new \DateTimeImmutable('first day of this month');
 
-        // Prepare the last 3 months (including current)
         for ($i = 0; $i < 3; $i++) {
             $month = $now->modify("-{$i} months")->format('F Y');
             $counts[$month] = 0;
@@ -87,15 +86,12 @@ class LeadService
             }
         }
 
-        // Optional: Sort descending by date
         uksort($counts, function ($a, $b) {
             return strtotime($b) <=> strtotime($a);
         });
 
         return $counts;
     }
-
-
 
     public function getLatestLeads(int $limit = 3): array
     {
